@@ -7,9 +7,16 @@ public class BallMovement : MonoBehaviour
     public float laneChangeSpeed = 8f;
     public float jumpForce = 7f;
 
+    public float maxForwardSpeed = 14f;
+public float speedIncreaseAmount = 0.5f;
+public float speedIncreaseInterval = 15f;
+
+private float difficultyTimer = 0f;
+
     private Rigidbody rb;
     private int currentLane = 1;   // 0 = left, 1 = center, 2 = right
     private bool isGrounded = true;
+    public int difficultyLevel = 1;
 
     private bool gameOver = false;
     private bool gameStarted = false;
@@ -36,6 +43,13 @@ public GameObject gameOverMenu;
 
         return;
     }
+    difficultyTimer += Time.deltaTime;
+
+if (difficultyTimer >= speedIncreaseInterval)
+{
+    IncreaseDifficulty();
+    difficultyTimer = 0f;
+}
 
     if (Input.GetKeyDown(KeyCode.A) && currentLane > 0)
         currentLane--;
@@ -86,6 +100,24 @@ void FixedUpdate()
     rb.linearVelocity = Vector3.zero;
     gameOverMenu.SetActive(true);
 }
+}
+
+private void IncreaseDifficulty()
+{
+    if (forwardSpeed < maxForwardSpeed)
+    {
+        forwardSpeed = Mathf.Min(
+            forwardSpeed + speedIncreaseAmount,
+            maxForwardSpeed
+        );
+    }
+
+    difficultyLevel++;
+
+    Debug.Log(
+        "Difficulty Level: " + difficultyLevel +
+        " | Current Speed: " + forwardSpeed
+    );
 }
 public void RestartGame()
 {
