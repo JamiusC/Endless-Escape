@@ -7,6 +7,8 @@ public class EndlessPlatform : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private PlatformTile tilePrefab;
 
+    [SerializeField] private BallMovement ballMovement;
+
     [Header("Setup")]
     [SerializeField] private int tileCount = 6;
     [SerializeField] private float tileLength = 30f;
@@ -46,7 +48,7 @@ public class EndlessPlatform : MonoBehaviour
 
             tile.transform.position = newPos;
 
-            tile.RandomizeObstacles();
+           tile.RandomizeTile(ballMovement.difficultyLevel);
 
             tiles.Enqueue(tile);
 
@@ -65,9 +67,9 @@ public class EndlessPlatform : MonoBehaviour
         PlatformTile tile = Instantiate(tilePrefab, pos, Quaternion.identity, transform);
 
         if (addObstacles)
-            tile.RandomizeObstacles();
+            tile.RandomizeTile(ballMovement.difficultyLevel);
         else
-            tile.ClearObstacles();
+            tile.ClearSpawnedObjects();
 
         tiles.Enqueue(tile);
 
