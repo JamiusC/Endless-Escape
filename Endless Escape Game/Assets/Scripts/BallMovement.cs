@@ -22,27 +22,33 @@ private float difficultyTimer = 0f;
     private bool gameStarted = false;
 
     private bool isPaused = false;
+    
+private AudioSource audioSource;
+    public AudioClip gameOverSound;
     public GameObject startMenu;
     public GameObject gameOverMenu;
 
     public GameObject pauseMenu;
 
     void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        Time.timeScale = 1f;
-    }
-
+{
+    rb = GetComponent<Rigidbody>();
+    audioSource = GetComponent<AudioSource>();
+    Time.timeScale = 1f;
+}
     void Update()
     
 {
     if (!gameStarted)
     return;
 
-    if (Input.GetKeyDown(KeyCode.Escape))
+if (Input.GetKeyDown(KeyCode.Escape))
 {
     TogglePause();
 }
+
+if (isPaused)
+    return;
     if (gameOver)
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -106,6 +112,7 @@ void FixedUpdate()
 
     if (collision.gameObject.CompareTag("Obstacle"))
 {
+    audioSource.PlayOneShot(gameOverSound);
     gameOver = true;
     rb.linearVelocity = Vector3.zero;
     gameOverMenu.SetActive(true);
