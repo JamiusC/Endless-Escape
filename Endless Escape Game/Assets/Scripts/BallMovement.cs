@@ -20,12 +20,17 @@ private float difficultyTimer = 0f;
 
     private bool gameOver = false;
     private bool gameStarted = false;
+
+    private bool isPaused = false;
     public GameObject startMenu;
-public GameObject gameOverMenu;
+    public GameObject gameOverMenu;
+
+    public GameObject pauseMenu;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Time.timeScale = 1f;
     }
 
     void Update()
@@ -33,6 +38,11 @@ public GameObject gameOverMenu;
 {
     if (!gameStarted)
     return;
+
+    if (Input.GetKeyDown(KeyCode.Escape))
+{
+    TogglePause();
+}
     if (gameOver)
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -129,5 +139,37 @@ public void StartGame()
 {
     gameStarted = true;
     startMenu.SetActive(false);
+}
+
+public void TogglePause()
+{
+    isPaused = !isPaused;
+
+    pauseMenu.SetActive(isPaused);
+
+    if (isPaused)
+    {
+        Time.timeScale = 0f;
+    }
+    else
+    {
+        Time.timeScale = 1f;
+    }
+}
+
+public void ResumeGame()
+{
+    if (isPaused)
+    {
+        TogglePause();
+    }
+}
+
+public void QuitGame()
+{
+    Time.timeScale = 1f;
+    Application.Quit();
+
+    Debug.Log("Game quit.");
 }
 }
